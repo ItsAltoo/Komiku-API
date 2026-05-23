@@ -19,6 +19,7 @@ app.get("/api", (_, res) => {
       "/ranking?period=[daily|weekly|all]",
       "/latest",
       "/popular-update?type=[manga|manhwa|manhua]",
+      "/just-added"
     ],
   });
 });
