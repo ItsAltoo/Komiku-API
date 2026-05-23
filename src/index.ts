@@ -9,24 +9,13 @@ const port = process.env.PORT || 3000;
 
 app.use("/api", router);
 
-app.get("/", (req, res) => res.redirect("/api"));
+app.get("/", (_, res) => res.redirect("/api"));
 
-app.get("/api", (req, res) => {
+app.get("/api", (_, res) => {
   res.json({
     message: "Welcome to Komiku Rest API",
     version: "2.0.0",
-    endpoints: [
-      "/recommended",
-      "/trending",
-      "/latest",
-      "/pustaka",
-      "/berwarna",
-      "/komik-populer",
-      "/detail-komik/:slug",
-      "/baca-chapter/:slug/:chapter",
-      "/search?q=keyword",
-      "/genre-detail/:slug",
-    ],
+    endpoints: ["/ranking?period=[daily|weekly|all]"],
   });
 });
 

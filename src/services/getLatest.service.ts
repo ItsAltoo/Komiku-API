@@ -2,9 +2,9 @@ import { load } from "cheerio";
 import { api } from "../lib/api.js";
 import { reqConfig } from "../lib/utils/requestConfig.js";
 
-export const latestService = async () => {
+export const latestService = async (url: string) => {
   try {
-    const { data } = await api.get("/", reqConfig);
+    const { data } = await api.get(url, reqConfig);
 
     const $ = load(data);
     const komikTerbaru: any[] = [];
