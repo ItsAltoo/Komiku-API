@@ -27,17 +27,17 @@ const rankingService = async (period: string = "all") => {
 
       // Element J
       const title = j.find("h4 a").text().trim();
-      const subTitle = j.find("span.ls4s").text().trim();
+      const status = j.find("span.ls4s").text().trim();
       const latestChapter = j.find("a.ls24").text().trim();
-      const chapterLink = j.find("a.ls24").attr("href") || "";
+      const chapterSlug = j.find("a.ls24").attr("href") || "";
 
       ranking.push({
         title,
-        subTitle,
+        status,
         slug,
         thumbnail,
         latestChapter,
-        chapterLink,
+        chapterSlug,
         rank: rankNumber,
       });
     });

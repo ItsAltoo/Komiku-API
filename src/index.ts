@@ -15,7 +15,7 @@ app.get("/api", (_, res) => {
   res.json({
     message: "Welcome to Komiku Rest API",
     version: "2.0.0",
-    endpoints: ["/ranking?period=[daily|weekly|all]"],
+    endpoints: ["/ranking?period=[daily|weekly|all]", "/latest"],
   });
 });
 
