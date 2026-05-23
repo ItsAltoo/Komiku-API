@@ -70,11 +70,39 @@ Contoh:
 [KA-1] Create Project
 ```
 
-Isi deskripsi Pull Request minimal:
+Isi deskripsi Pull Request wajib menggunakan template berikut:
 
+```markdown
+## Summary
+[Ringkasan singkat tentang apa yang dilakukan PR ini]
+
+## Changes
+### Files Created:
+- `path/to/file` - [Deskripsi file baru]
+
+### Files Modified:
+- `path/to/file` - [Deskripsi perubahan pada file existing]
+
+## Implementation Details
+- [Detail teknis implementasi]
+- [Library atau logic yang digunakan]
+
+## Testing
+[Cara pengujian fitur, contoh curl atau langkah-langkahnya]
+```bash
+# Contoh pengujian
+GET /api/your-endpoint
+```
+
+## Acceptance Criteria Checklist
+- [ ] [Kriteria 1]
+- [ ] [Kriteria 2]
+
+## Related Issue
+Closes KA-<number>
+```
+
+Aturan tambahan:
 1. Pastikan branch berasal dari kode issue yang benar.
 2. Pastikan judul commit sudah sesuai format.
-3. Ringkasan perubahan yang dilakukan.
-4. Cara pengujian singkat.
-5. Referensi issue terkait (contoh: `KA-1`).
-6. Jangan mencantumkan email apa pun pada judul/deskripsi PR.
+3. Jangan mencantumkan email apa pun pada judul/deskripsi PR.
