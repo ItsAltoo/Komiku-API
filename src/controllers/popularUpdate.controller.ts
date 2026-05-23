@@ -20,7 +20,7 @@ export const getPopularUpdate = async (req: Request, res: Response) => {
   } catch (error) {
     return errorResponse({
       res,
-      message: "Failed to fetch ranking manga",
+      message: "Failed to fetch popular update manga",
       error: error instanceof Error ? error.message : String(error),
     });
   }
