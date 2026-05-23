@@ -4,7 +4,7 @@ import { successResponse, errorResponse } from "../lib/utils/index.js";
 
 export const getLatest = async (req: Request, res: Response) => {
   try {
-    const data = await latestService("/");
+    const { data } = await latestService();
 
     return successResponse({
       res,
