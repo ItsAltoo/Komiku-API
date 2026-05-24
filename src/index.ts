@@ -19,7 +19,8 @@ app.get("/api", (_, res) => {
       "/ranking?period=[daily|weekly|all]",
       "/latest",
       "/popular-update?type=[manga|manhwa|manhua]",
-      "/just-added"
+      "/just-added",
+      "/list-genre?name=[isekai|fantasy|romance|ecchi|drama|sliceOfLife|schoolLife|comedy|action|adventure]",
     ],
   });
 });
