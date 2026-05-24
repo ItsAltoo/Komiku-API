@@ -4,8 +4,7 @@ import { api } from "../lib/api.js";
 const rankingService = async (period: string = "all") => {
   try {
     const res = await api.get("/");
-    const html = res.data;
-    const $ = load(html);
+    const $ = load(res.data);
 
     const selectorMap: Record<string, string> = {
       daily: "#rank-harian",

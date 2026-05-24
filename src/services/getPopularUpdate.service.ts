@@ -4,8 +4,7 @@ import { api } from "../lib/api.js";
 export const popularUpdateService = async (type: string) => {
   try {
     const res = await api.get("/");
-    const html = res.data;
-    const $ = load(html);
+    const $ = load(res.data);
 
     const selectorMap: Record<string, string> = {
       manga: "manga",

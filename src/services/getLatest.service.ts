@@ -4,8 +4,7 @@ import { api } from "../lib/api.js";
 export const latestService = async () => {
   try {
     const res = await api.get("/");
-    const html = res.data;
-    const $ = load(html);
+    const $ = load(res.data);
 
     const latest: any[] = [];
 
