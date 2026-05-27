@@ -1,26 +1,14 @@
 import { load } from "cheerio";
 import { api } from "../shared/lib/api.js";
 
-export const popularUpdateService = async (type: string) => {
+export const latestListService = async () => {
   try {
     const res = await api.get("/");
     const $ = load(res.data);
 
-    const selectorMap: Record<string, string> = {
-      manga: "manga",
-      manhwa: "manhwa",
-      manhua: "manhua",
-    };
-    const filteredType = selectorMap[type]
-      ?.charAt(0)
-      .toUpperCase()
-      .concat(selectorMap[type]?.slice(1));
+    const latestList: any[] = [];
 
-    const popularUpdate: any[] = [];
-
-    $(
-      `#Komik_Populer #ls12-populer article.ls2${filteredType ? `[data-tipe="${filteredType}"]` : ""}`,
-    ).each((_, el) => {
+    $("#Terbaru .ls2-wrap article.ls2").each((_, el) => {
       const v = $(el).find(".ls2v");
       const j = $(el).find(".ls2j");
 
@@ -37,19 +25,19 @@ export const popularUpdateService = async (type: string) => {
       const status = j.find("span.ls2t").text().trim();
       const parts = status.split("·").map((p) => p.trim());
       const genre = parts[0] || "";
-      const views = parts[1] || "";
+      const timeAgo = parts[1] || "";
 
       const latestChapter = j.find("a.ls2l").text().trim();
       const chapterSlug = j.find("a.ls2l").attr("href") || "";
 
-      popularUpdate.push({
+      latestList.push({
         title,
         slug,
         thumbnail,
         updateCount,
         status: {
           genre,
-          views,
+          timeAgo,
         },
         latestChapter,
         chapterSlug,
@@ -57,7 +45,7 @@ export const popularUpdateService = async (type: string) => {
       });
     });
 
-    return { data: popularUpdate };
+    return { data: latestList };
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : String(error));
   }

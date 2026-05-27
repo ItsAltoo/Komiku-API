@@ -1,5 +1,8 @@
 import type { Request, Response } from "express";
-import { errorResponse, successResponse } from "../lib/utils/response.js";
+import {
+  errorResponse,
+  successResponse,
+} from "../shared/lib/utils/response.js";
 import { justAddedService } from "../services/getJustAdded.service.js";
 
 export const getJustAdded = async (req: Request, res: Response) => {
