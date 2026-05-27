@@ -1,25 +1,21 @@
 import { load } from "cheerio";
 import { apiSecond } from "../shared/lib/api.js";
-import type { GenreType, KomikType } from "../shared/types/index.js";
+import type { KomikType } from "../shared/types/index.js";
 
-type LatestQuery = {
+type PopularQuery = {
   page: number;
   orderby?: "modified" | "date" | "rand" | "meta_value_num";
   type?: KomikType;
-  genre?: GenreType;
-  genre2?: GenreType;
-  status?: "ongoing" | "end";
 };
 
-export const latestService = async (query: LatestQuery) => {
+export const popularService = async (query: PopularQuery) => {
   try {
-    const res = await apiSecond.get(`/manga/page/${query.page}`, {
+    const res = await apiSecond.get(`/other/hot/page/${query.page}`, {
       params: { ...query, tipe: query.type },
     });
-
     const $ = load(res.data);
 
-    const latest: any[] = [];
+    const popular: any[] = [];
 
     $("body div.bge").each((_, el) => {
       const bgei = $(el).find(".bgei");
@@ -35,9 +31,9 @@ export const latestService = async (query: LatestQuery) => {
       const description = kan.find("p").text().trim();
 
       const judul2 = kan.find("span.judul2").text().trim();
-      const parts = judul2.split("|").map((p) => p.trim());
+      const parts = judul2.split("•").map((p) => p.trim());
 
-      const views = kan.find("span.judul2 span>b").text().trim();
+      const views = parts[0] || "";
       const timeAgo = parts[1] || "";
       const isColored = parts[2]?.toLowerCase().includes("berwarna") ?? false;
 
@@ -49,7 +45,7 @@ export const latestService = async (query: LatestQuery) => {
       const latestChapter = chapters.eq(1).find("a>span").eq(1).text().trim();
       const latestChapterSlug = chapters.eq(1).find("a").attr("href") || "";
 
-      latest.push({
+      popular.push({
         title,
         slug,
         thumbnail,
@@ -73,7 +69,7 @@ export const latestService = async (query: LatestQuery) => {
       });
     });
 
-    return { data: latest };
+    return { data: popular };
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : String(error));
   }

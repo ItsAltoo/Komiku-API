@@ -4,3 +4,4 @@ export * from "./popularUpdate.controller.js";
 export * from "./justAdded.controller.js";
 export * from "./listGenre.controller.js";
 export * from "./latest.controller.js";
+export * from "./popular.controller.js";
