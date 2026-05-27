@@ -1,5 +1,5 @@
 import { load } from "cheerio";
-import { api } from "../lib/api.js";
+import { api } from "../shared/lib/api.js";
 
 const rankingService = async (period: string = "all") => {
   try {
@@ -26,15 +26,23 @@ const rankingService = async (period: string = "all") => {
 
       // Element J
       const title = j.find("h4 a").text().trim();
+
       const status = j.find("span.ls4s").text().trim();
+      const parts = status.split("·").map((p) => p.trim());
+      const genre = parts[0] || "";
+      const views = parts[1] || "";
+
       const latestChapter = j.find("a.ls24").text().trim();
       const chapterSlug = j.find("a.ls24").attr("href") || "";
 
       ranking.push({
         title,
-        status,
         slug,
         thumbnail,
+        status: {
+          genre,
+          views,
+        },
         latestChapter,
         chapterSlug,
         rank: rankNumber,

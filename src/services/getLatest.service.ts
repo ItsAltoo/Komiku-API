@@ -1,39 +1,89 @@
 import { load } from "cheerio";
-import { api } from "../lib/api.js";
+import { apiSecond } from "../shared/lib/api.js";
+import type { GenreType, KomikType } from "../shared/types/index.js";
 
-export const latestService = async () => {
+type LatestQuery = {
+  page: number;
+  orderby?: "modified" | "date" | "rand" | "meta_value_num";
+  type?: KomikType;
+  genre?: GenreType;
+  genre2?: GenreType;
+  status?: "ongoing" | "end";
+};
+
+export const latestService = async ({
+  page = 1,
+  orderby,
+  type,
+  genre,
+  genre2,
+  status,
+}: LatestQuery) => {
   try {
-    const res = await api.get("/");
+    const params = new URLSearchParams();
+
+    if (orderby) params.set("orderby", orderby);
+    if (type) params.set("tipe", type);
+    if (genre) params.set("genre", genre);
+    if (genre2) params.set("genre2", genre2);
+    if (status) params.set("status", status);
+
+    const query = params.toString() ? `?${params.toString()}` : "";
+    const res = await apiSecond.get(`/manga/page/${page}/${query}`);
+
     const $ = load(res.data);
 
     const latest: any[] = [];
 
-    $("#Terbaru .ls2-wrap article.ls2").each((_, el) => {
-      const v = $(el).find(".ls2v");
-      const j = $(el).find(".ls2j");
+    $("body div.bge").each((_, el) => {
+      const bgei = $(el).find(".bgei");
+      const kan = $(el).find(".kan");
 
-      // Element V
-      const slug = v.find("a").attr("href") || "";
-      const thumbnail = v.find("a img").attr("data-src") || "";
-      const flagRaw = v.find("img.flag").attr("src") || "";
-      const flag = flagRaw ? process.env.BASE_URL + flagRaw : "";
-      const updateCount = v.find("span.up").text().trim();
+      // Element bgei
+      const slug = bgei.find("a").attr("href") || "";
+      const thumbnail = bgei.find("a img").attr("src") || "";
+      const updateCount = bgei.find("span.up").text().trim();
 
-      // Element J
-      const title = j.find("h3 a").text().trim();
-      const status = j.find("span.ls2t").text().trim();
-      const latestChapter = j.find("a.ls2l").text().trim();
-      const chapterSlug = j.find("a.ls2l").attr("href") || "";
+      // Element kan
+      const title = kan.find("a h3").text().trim();
+      const description = kan.find("p").text().trim();
+
+      const judul2 = kan.find("span.judul2").text().trim();
+      const parts = judul2.split("|").map((p) => p.trim());
+
+      const reader = kan.find("span.judul2 span>b").text().trim();
+      const timeAgo = parts[1] || "";
+      const isColored = parts[2]?.toLowerCase().includes("berwarna") ?? false;
+
+      const chapters = kan.find("div.new1");
+
+      const initialChapter = chapters.eq(0).find("a>span").eq(1).text().trim();
+      const initialChapterSlug = chapters.eq(0).find("a").attr("href") || "";
+
+      const latestChapter = chapters.eq(1).find("a>span").eq(1).text().trim();
+      const latestChapterSlug = chapters.eq(1).find("a").attr("href") || "";
 
       latest.push({
         title,
         slug,
         thumbnail,
+        description,
         updateCount,
-        status,
-        latestChapter,
-        chapterSlug,
-        flag,
+        status: {
+          reader,
+          timeAgo,
+          isColored,
+        },
+        chapters: {
+          initial: {
+            title: initialChapter,
+            slug: initialChapterSlug,
+          },
+          latest: {
+            title: latestChapter,
+            slug: latestChapterSlug,
+          },
+        },
       });
     });
 

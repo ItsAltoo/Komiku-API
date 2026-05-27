@@ -1,5 +1,5 @@
 import { load } from "cheerio";
-import { api } from "../lib/api.js";
+import { api } from "../shared/lib/api.js";
 
 type genreList = { genre: string; items: any[] }[];
 
@@ -45,7 +45,12 @@ export const listGenreService = async (name?: string) => {
 
         // Element J
         const title = j.find("h3 a").text().trim();
-        const genreViews = j.find("span.ls2t").text().trim();
+
+        const status = j.find("span.ls2t").text().trim();
+        const parts = status.split("·").map((p) => p.trim());
+        const genre = parts[0] || "";
+        const views = parts[1] || "";
+
         const latestChapter = j.find("a.ls2l").text().trim();
         const chapterSlug = j.find("a.ls2l").attr("href") || "";
 
@@ -54,7 +59,10 @@ export const listGenreService = async (name?: string) => {
           slug,
           thumbnail,
           flag,
-          genreViews,
+          status: {
+            genre,
+            views,
+          },
           latestChapter,
           chapterSlug,
         });
@@ -65,6 +73,6 @@ export const listGenreService = async (name?: string) => {
 
     return { data: genreList };
   } catch (error) {
-    throw error instanceof Error ? error : new Error(String(error));
+    throw new Error(error instanceof Error ? error.message : String(error));
   }
 };

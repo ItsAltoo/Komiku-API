@@ -1,5 +1,8 @@
 import type { Request, Response } from "express";
-import { errorResponse, successResponse } from "../lib/utils/response.js";
+import {
+  errorResponse,
+  successResponse,
+} from "../shared/lib/utils/response.js";
 import { listGenreService } from "../services/getListGenre.service.js";
 
 export const getListGenre = async (req: Request, res: Response) => {

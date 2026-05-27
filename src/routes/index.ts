@@ -1,19 +1,14 @@
 import { Router } from "express";
-import {
-  getLatest,
-  getPopularUpdate,
-  getRanking,
-  getJustAdded,
-  getListGenre,
-} from "../controllers/index.js";
+import * as control from "../controllers/index.js";
 
 const router = Router();
 
 router
-  .get("/ranking", getRanking)
-  .get("/latest", getLatest)
-  .get("/popular-update", getPopularUpdate)
-  .get("/just-added", getJustAdded)
-  .get("/list-genre", getListGenre)
+  .get("/ranking", control.getRanking)
+  .get("/latest-list", control.getLatestList)
+  .get("/popular-update", control.getPopularUpdate)
+  .get("/just-added", control.getJustAdded)
+  .get("/list-genre", control.getListGenre)
+  .get("/latest", control.getLatest)
 
 export default router;

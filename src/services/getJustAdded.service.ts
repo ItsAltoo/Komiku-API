@@ -1,16 +1,17 @@
 import { load } from "cheerio";
-import { api } from "../lib/api.js";
+import { api } from "../shared/lib/api.js";
+
+const selectorMap: Record<string, string> = {
+  manga: "manga",
+  manhwa: "manhwa",
+  manhua: "manhua",
+};
 
 export const justAddedService = async (type: string) => {
   try {
     const res = await api.get("/");
     const $ = load(res.data);
 
-    const selectorMap: Record<string, string> = {
-      manga: "manga",
-      manhwa: "manhwa",
-      manhua: "manhua",
-    };
     const filteredType = selectorMap[type]
       ?.charAt(0)
       .toUpperCase()
@@ -33,7 +34,12 @@ export const justAddedService = async (type: string) => {
 
       // Element J
       const title = j.find("h3 a").text().trim();
+
       const status = j.find("span.ls2t").text().trim();
+      const parts = status.split("·").map((p) => p.trim());
+      const genre = parts[0] || "";
+      const views = parts[1] || "";
+
       const latestChapter = j.find("a.ls2l").text().trim();
       const chapterSlug = j.find("a.ls2l").attr("href") || "";
 
@@ -42,7 +48,10 @@ export const justAddedService = async (type: string) => {
         slug,
         thumbnail,
         updateCount,
-        status,
+        status: {
+          genre,
+          views,
+        },
         latestChapter,
         chapterSlug,
         flag,
@@ -51,6 +60,6 @@ export const justAddedService = async (type: string) => {
 
     return { data: justAdded };
   } catch (error) {
-    throw error instanceof Error ? error : new Error(String(error));
+    throw new Error(error instanceof Error ? error.message : String(error));
   }
 };

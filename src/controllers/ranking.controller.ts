@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import rankingService from "../services/getRanking.service.js";
-import { successResponse, errorResponse } from "../lib/utils/index.js";
+import { successResponse, errorResponse } from "../shared/lib/utils/index.js";
 
 export const getRanking = async (req: Request, res: Response) => {
   try {
