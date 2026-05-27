@@ -10,5 +10,6 @@ router
   .get("/just-added", control.getJustAdded)
   .get("/list-genre", control.getListGenre)
   .get("/latest", control.getLatest)
+  .get("/popular", control.getPopular)
 
 export default router;
