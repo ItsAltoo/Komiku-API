@@ -1,5 +1,6 @@
 import { load } from "cheerio";
 import { api } from "../shared/lib/api.js";
+import { slugFilter } from "../shared/lib/utils/index.js";
 
 const rankingService = async (period: string = "all") => {
   try {
@@ -20,7 +21,7 @@ const rankingService = async (period: string = "all") => {
       const j = $(el).find(".ls4j");
 
       // Element V
-      const slug = v.find("a").attr("href") || "";
+      const slug = slugFilter(v.find("a").attr("href") || "");
       const thumbnail = v.find("img").attr("data-src") || "";
       const rankNumber = v.find("span.rank-num").text().trim();
 
@@ -33,7 +34,7 @@ const rankingService = async (period: string = "all") => {
       const views = parts[1] || "";
 
       const latestChapter = j.find("a.ls24").text().trim();
-      const chapterSlug = j.find("a.ls24").attr("href") || "";
+      const latestChapterSlug = slugFilter(j.find("a.ls24").attr("href") || "");
 
       ranking.push({
         title,
@@ -44,7 +45,7 @@ const rankingService = async (period: string = "all") => {
           views,
         },
         latestChapter,
-        chapterSlug,
+        latestChapterSlug,
         rank: rankNumber,
       });
     });

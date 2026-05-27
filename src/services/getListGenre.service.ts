@@ -1,5 +1,6 @@
 import { load } from "cheerio";
 import { api } from "../shared/lib/api.js";
+import { slugFilter } from "../shared/lib/utils/index.js";
 
 type genreList = { genre: string; items: any[] }[];
 
@@ -38,7 +39,7 @@ export const listGenreService = async (name?: string) => {
         const j = $(el).find(".ls2j");
 
         // Element V
-        const slug = v.find("a").attr("href") || "";
+        const slug = slugFilter(v.find("a").attr("href") || "");
         const thumbnail = v.find("a img").attr("data-src") || "";
         const flagRaw = v.find("img.flag").attr("src") || "";
         const flag = flagRaw ? process.env.BASE_URL + flagRaw : "";
@@ -52,7 +53,7 @@ export const listGenreService = async (name?: string) => {
         const views = parts[1] || "";
 
         const latestChapter = j.find("a.ls2l").text().trim();
-        const chapterSlug = j.find("a.ls2l").attr("href") || "";
+        const latestChapterSlug = slugFilter(j.find("a.ls2l").attr("href") || "");
 
         items.push({
           title,
@@ -64,7 +65,7 @@ export const listGenreService = async (name?: string) => {
             views,
           },
           latestChapter,
-          chapterSlug,
+          latestChapterSlug,
         });
       });
 
