@@ -1,6 +1,7 @@
 import { load } from "cheerio";
 import { apiSecond } from "../shared/lib/api.js";
 import type { GenreType, KomikType } from "../shared/types/index.js";
+import { slugFilter } from "../shared/lib/utils/slugFilter.js";
 
 type LatestQuery = {
   page: number;
@@ -26,7 +27,7 @@ export const latestService = async (query: LatestQuery) => {
       const kan = $(el).find(".kan");
 
       // Element bgei
-      const slug = bgei.find("a").attr("href") || "";
+      const slug = slugFilter(bgei.find("a").attr("href") || "");
       const thumbnail = bgei.find("a img").attr("src") || "";
       const updateCount = bgei.find("span.up").text().trim();
 
@@ -44,10 +45,14 @@ export const latestService = async (query: LatestQuery) => {
       const chapters = kan.find("div.new1");
 
       const initialChapter = chapters.eq(0).find("a>span").eq(1).text().trim();
-      const initialChapterSlug = chapters.eq(0).find("a").attr("href") || "";
+      const initialChapterSlug = slugFilter(
+        chapters.eq(0).find("a").attr("href") || "",
+      );
 
       const latestChapter = chapters.eq(1).find("a>span").eq(1).text().trim();
-      const latestChapterSlug = chapters.eq(1).find("a").attr("href") || "";
+      const latestChapterSlug = slugFilter(
+        chapters.eq(1).find("a").attr("href") || "",
+      );
 
       latest.push({
         title,
