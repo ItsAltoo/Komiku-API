@@ -23,7 +23,9 @@ app.get("/api", (_, res) => {
       "/list-genre?name=[isekai|fantasy|romance|ecchi|drama|sliceOfLife|schoolLife|comedy|action|adventure]",
       "/latest/?page=[number]&type=[manga|manhwa|manhua]&genre=[genreName]&genre2=[genreName2]&status=[ongoing|end]&orderby=[modified|date|rand|meta_value_num]",
       "/popular/?page=[number]&type=[manga|manhwa|manhua]&orderby=[modified|date|rand|meta_value_num]",
-      "/comic-list"
+      "/comic-list?page=[number]&type=[manga|manhwa|manhua]&letter=[A-Z]",
+      "/detail/:slug",
+      "/detail/:slug/similar-comics",
     ],
   });
 });

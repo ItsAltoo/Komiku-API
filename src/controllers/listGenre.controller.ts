@@ -6,9 +6,9 @@ import {
 import { listGenreService } from "../services/getListGenre.service.js";
 
 export const getListGenre = async (req: Request, res: Response) => {
-  try {
-    const { name } = req.query;
+  const { name } = req.query;
 
+  try {
     const validGenres = [
       "isekai",
       "fantasy",

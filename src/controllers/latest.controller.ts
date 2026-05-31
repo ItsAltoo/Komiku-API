@@ -4,6 +4,7 @@ import { successResponse, errorResponse } from "../shared/lib/utils/index.js";
 
 export const getLatest = async (req: Request, res: Response) => {
   const { page, orderby, type, genre, genre2, status } = req.query;
+
   try {
     const { data } = await latestService({
       page: Number(page) || 1,

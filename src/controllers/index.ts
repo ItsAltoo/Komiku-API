@@ -6,3 +6,5 @@ export * from "./listGenre.controller.js";
 export * from "./latest.controller.js";
 export * from "./popular.controller.js";
 export * from "./comicList.controller.js";
+export * from "./detail.controller.js";
+export * from "./similarComics.controller.js";

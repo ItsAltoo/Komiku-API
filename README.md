@@ -49,6 +49,17 @@ Dengan npm:
 npm run dev
 ```
 
+## Menjalankan dengan Docker
+
+```bash
+docker compose up --build
+```
+
+Setelah container berjalan, akses:
+
+- Root: `http://localhost:3000/`
+- API info: `http://localhost:3000/api`
+
 ### 5. Cek aplikasi berjalan
 
 - Root: `http://localhost:3000/`
