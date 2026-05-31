@@ -3,9 +3,9 @@ import rankingService from "../services/getRanking.service.js";
 import { successResponse, errorResponse } from "../shared/lib/utils/index.js";
 
 export const getRanking = async (req: Request, res: Response) => {
-  try {
-    const { period } = req.query;
+  const { period } = req.query;
 
+  try {
     const validPeriods = ["daily", "weekly", "all"];
     const selectedPeriod =
       typeof period === "string" && validPeriods.includes(period)

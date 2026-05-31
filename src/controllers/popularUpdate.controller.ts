@@ -6,9 +6,9 @@ import {
 import { popularUpdateService } from "../services/getPopularUpdate.service.js";
 
 export const getPopularUpdate = async (req: Request, res: Response) => {
-  try {
-    const { type } = req.query;
+  const { type } = req.query;
 
+  try {
     const validTypes = ["manga", "manhwa", "manhua"];
     const selectedType =
       typeof type === "string" && validTypes.includes(type) ? type : "all";

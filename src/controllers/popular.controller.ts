@@ -7,6 +7,7 @@ import { popularService } from "../services/getPopular.service.js";
 
 export const getPopular = async (req: Request, res: Response) => {
   const { page, orderby, type } = req.query;
+
   try {
     const { data } = await popularService({
       page: Number(page) || 1,

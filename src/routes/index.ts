@@ -11,6 +11,9 @@ router
   .get("/list-genre", control.getListGenre)
   .get("/latest", control.getLatest)
   .get("/popular", control.getPopular)
-  .get("/comic-list", control.getComicList);
+  .get("/comic-list", control.getComicList)
+  .get("/detail/:slug", control.getDetail)
+  .get("/detail/:slug/similar-comics", control.getSimilarComics)
+  
 
 export default router;

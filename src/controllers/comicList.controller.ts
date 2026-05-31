@@ -7,6 +7,7 @@ import { comicListService } from "../services/getComicList.service.js";
 
 export const getComicList = async (req: Request, res: Response) => {
   const { page, type, letter } = req.query;
+
   try {
     const { data } = await comicListService({
       page: Number(page) || 1,

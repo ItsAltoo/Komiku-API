@@ -6,9 +6,9 @@ import {
 import { justAddedService } from "../services/getJustAdded.service.js";
 
 export const getJustAdded = async (req: Request, res: Response) => {
-  try {
-    const { type } = req.query;
+  const { type } = req.query;
 
+  try {
     const validTypes = ["manga", "manhwa", "manhua"];
     const selectedType =
       typeof type === "string" && validTypes.includes(type) ? type : "all";
