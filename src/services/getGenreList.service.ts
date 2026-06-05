@@ -8,7 +8,9 @@ export const genreListService = async () => {
 
     const genreList: { value: string | undefined; text: string }[] = [];
 
-    $("form.filer2 select[name='genre'] option").each((_, element) => {
+    $("form.filer2 select[name='genre'] option").each((index, element) => {
+      if (index === 0) return;
+      
       const ele = $(element);
       const value = ele.attr("value");
       const text = ele.text().trim();
@@ -19,7 +21,7 @@ export const genreListService = async () => {
       });
     });
 
-    return { data: genreList.slice(1) };
+    return { data: genreList };
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : String(error));
   }
