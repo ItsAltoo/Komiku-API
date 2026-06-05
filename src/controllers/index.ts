@@ -8,3 +8,4 @@ export * from "./popular.controller.js";
 export * from "./comicList.controller.js";
 export * from "./detail.controller.js";
 export * from "./similarComics.controller.js";
+export * from "./genreList.controller.js";
