@@ -51,4 +51,8 @@ app.get("/api", (_, res) => {
   });
 });
 
-app.listen(port, () => console.log(`Server is running on port ${port}`));
+if (process.env.NODE_ENV !== "serverless") {
+  app.listen(port, () => console.log(`Server is running on port ${port}`));
+}
+
+export default app;
