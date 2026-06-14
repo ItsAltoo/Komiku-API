@@ -1,26 +1,45 @@
 import { load } from "cheerio";
 import { apiSecond } from "../shared/lib/api.js";
-import type { GenreType, KomikType } from "../shared/types/index.js";
+import type { ApiResponse, BaseChapter, BaseComic, GenreType, KomikType } from "../shared/types/index.js";
 import { slugFilter } from "../shared/lib/utils/slugFilter.js";
 
 type LatestQuery = {
   page: number;
-  orderby?: "modified" | "date" | "rand" | "meta_value_num";
+  orderBy?: "modified" | "date" | "rand" | "ranking";
   type?: KomikType;
   genre?: GenreType;
   genre2?: GenreType;
   status?: "ongoing" | "end";
 };
 
-export const latestService = async (query: LatestQuery) => {
+export type LatestComic = BaseComic & {
+  description: string;
+  updateCount: string;
+  status: {
+    views: string;
+    timeAgo: string;
+    isColored: boolean;
+  };
+  chapters: {
+    initial: BaseChapter;
+    latest: BaseChapter;
+  };
+};
+
+export const latestService = async (
+  query: LatestQuery,
+): Promise<ApiResponse<LatestComic[]>> => {
   try {
+    const { orderBy, type, ...rest } = query;
+    const mappedOrderBy = orderBy === "ranking" ? "meta_value_num" : orderBy;
+
     const res = await apiSecond.get(`/manga/page/${query.page}`, {
-      params: { ...query, tipe: query.type },
+      params: { ...rest, tipe: type, orderby: mappedOrderBy },
     });
 
     const $ = load(res.data);
 
-    const latest: any[] = [];
+    const latest: LatestComic[] = [];
 
     $("body div.bge").each((_, el) => {
       const bgei = $(el).find(".bgei");

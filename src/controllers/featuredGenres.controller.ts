@@ -3,9 +3,9 @@ import {
   errorResponse,
   successResponse,
 } from "../shared/lib/utils/response.js";
-import { listGenreService } from "../services/getListGenre.service.js";
+import { getFeaturedGenresService } from "../services/getFeaturedGenres.service.js";
 
-export const getListGenre = async (req: Request, res: Response) => {
+export const getFeaturedGenres = async (req: Request, res: Response) => {
   const { name } = req.query;
 
   try {
@@ -25,17 +25,17 @@ export const getListGenre = async (req: Request, res: Response) => {
     const selectedGenre =
       typeof name === "string" && validGenres.includes(name) ? name : "all";
 
-    const { data } = await listGenreService(selectedGenre);
+    const { data } = await getFeaturedGenresService(selectedGenre);
 
     return successResponse({
       res,
-      message: `Successfully fetched list genre of type ${selectedGenre}`,
+      message: `Successfully fetched featured genres of type ${selectedGenre}`,
       data: data,
     });
   } catch (error) {
     return errorResponse({
       res,
-      message: "Failed to fetch list genre",
+      message: "Failed to fetch featured genres",
       error: error instanceof Error ? error.message : String(error),
     });
   }

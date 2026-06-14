@@ -1,13 +1,25 @@
 import { load } from "cheerio";
 import { api } from "../shared/lib/api.js";
 import { slugFilter } from "../shared/lib/utils/index.js";
+import type { ApiResponse, BaseComic } from "../shared/types/index.js";
 
-export const latestListService = async () => {
+export type LatestListComic = BaseComic & {
+  updateCount: string;
+  status: {
+    genre: string;
+    timeAgo: string;
+  };
+  latestChapter: string;
+  latestChapterSlug: string;
+  flag: string;
+};
+
+export const latestListService = async (): Promise<ApiResponse<LatestListComic[]>> => {
   try {
     const res = await api.get("/");
     const $ = load(res.data);
 
-    const latestList: any[] = [];
+    const latestList: LatestListComic[] = [];
 
     $("#Terbaru .ls2-wrap article.ls2").each((_, el) => {
       const v = $(el).find(".ls2v");

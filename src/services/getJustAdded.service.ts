@@ -1,6 +1,7 @@
 import { load } from "cheerio";
 import { api } from "../shared/lib/api.js";
 import { slugFilter } from "../shared/lib/utils/slugFilter.js";
+import type { ApiResponse, BaseComic } from "../shared/types/index.js";
 
 const selectorMap: Record<string, string> = {
   manga: "manga",
@@ -8,7 +9,20 @@ const selectorMap: Record<string, string> = {
   manhua: "manhua",
 };
 
-export const justAddedService = async (type: string) => {
+export type JustAddedComic = BaseComic & {
+  updateCount: string;
+  status: {
+    genre: string;
+    views: string;
+  };
+  latestChapter: string;
+  latestChapterSlug: string;
+  flag: string;
+};
+
+export const justAddedService = async (
+  type: string,
+): Promise<ApiResponse<JustAddedComic[]>> => {
   try {
     const res = await api.get("/");
     const $ = load(res.data);
@@ -18,7 +32,7 @@ export const justAddedService = async (type: string) => {
       .toUpperCase()
       .concat(selectorMap[type]?.slice(1));
 
-    const justAdded: any[] = [];
+    const justAdded: JustAddedComic[] = [];
 
     $(
       `#Baru_Ditambahkan #ls12-baru article.ls2${filteredType ? `[data-tipe="${filteredType}"]` : ""}`,

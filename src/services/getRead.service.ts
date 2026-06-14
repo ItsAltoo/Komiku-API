@@ -2,13 +2,26 @@ import { load } from "cheerio";
 import { api } from "../shared/lib/api.js";
 import { slugFilter } from "../shared/lib/utils/slugFilter.js";
 import { reqConfig } from "../shared/lib/utils/requestConfig.js";
+import type { ApiResponse } from "../shared/types/index.js";
 
-export const readService = async (slug: string) => {
+export type ReadComicData = {
+  title: string;
+  navigation: {
+    list: string;
+    next: string;
+    prev: string;
+  };
+  images: string[];
+};
+
+export const readService = async (
+  slug: string,
+): Promise<ApiResponse<ReadComicData>> => {
   try {
     const res = await api.get(`/${slug}`, reqConfig);
     const $ = load(res.data);
 
-    let readData: any = {};
+    let readData: Partial<ReadComicData> = {};
 
     $("div.main").each((_, element) => {
       const ele = $(element);
@@ -43,7 +56,7 @@ export const readService = async (slug: string) => {
       };
     });
 
-    return { data: readData };
+    return { data: readData as ReadComicData };
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : String(error));
   }

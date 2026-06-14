@@ -3,21 +3,21 @@ import {
   errorResponse,
   successResponse,
 } from "../shared/lib/utils/response.js";
-import { genreListService } from "../services/getGenreList.service.js";
+import { getGenresService } from "../services/getGenres.service.js";
 
-export const getGenreList = async (req: Request, res: Response) => {
+export const getGenres = async (req: Request, res: Response) => {
   try {
-    const { data } = await genreListService();
+    const { data } = await getGenresService();
 
     return successResponse({
       res,
-      message: "Genre list retrieved successfully",
+      message: "Genres retrieved successfully",
       data,
     });
   } catch (error) {
     return errorResponse({
       res,
-      message: "Failed to retrieve genre list",
+      message: "Failed to retrieve genres",
       error: error instanceof Error ? error.message : String(error),
     });
   }

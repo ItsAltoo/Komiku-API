@@ -1,22 +1,41 @@
 import { load } from "cheerio";
 import { apiSecond } from "../shared/lib/api.js";
-import type { KomikType } from "../shared/types/index.js";
+import type { ApiResponse, BaseChapter, BaseComic, KomikType } from "../shared/types/index.js";
 import { slugFilter } from "../shared/lib/utils/index.js";
 
 type PopularQuery = {
   page: number;
-  orderby?: "modified" | "date" | "rand" | "meta_value_num";
+  orderBy?: "modified" | "date" | "rand" | "ranking";
   type?: KomikType;
 };
 
-export const popularService = async (query: PopularQuery) => {
+export type PopularComic = BaseComic & {
+  description: string;
+  updateCount: string;
+  status: {
+    views: string;
+    timeAgo: string;
+    isColored: boolean;
+  };
+  chapters: {
+    initial: BaseChapter;
+    latest: BaseChapter;
+  };
+};
+
+export const popularService = async (
+  query: PopularQuery,
+): Promise<ApiResponse<PopularComic[]>> => {
   try {
+    const { orderBy, type, ...rest } = query;
+    const mappedOrderBy = orderBy === "ranking" ? "meta_value_num" : orderBy;
+
     const res = await apiSecond.get(`/other/hot/page/${query.page}`, {
-      params: { ...query, tipe: query.type },
+      params: { ...rest, tipe: type, orderby: mappedOrderBy },
     });
     const $ = load(res.data);
 
-    const popular: any[] = [];
+    const popular: PopularComic[] = [];
 
     $("body div.bge").each((_, el) => {
       const bgei = $(el).find(".bgei");

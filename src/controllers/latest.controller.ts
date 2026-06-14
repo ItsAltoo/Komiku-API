@@ -3,12 +3,12 @@ import { latestService } from "../services/getLatest.service.js";
 import { successResponse, errorResponse } from "../shared/lib/utils/index.js";
 
 export const getLatest = async (req: Request, res: Response) => {
-  const { page, orderby, type, genre, genre2, status } = req.query;
+  const { page, orderBy, type, genre, genre2, status } = req.query;
 
   try {
     const { data } = await latestService({
       page: Number(page) || 1,
-      orderby: (orderby as any) || "",
+      orderBy: (orderBy as any) || "",
       type: (type as any) || "",
       genre: (genre as any) || "",
       genre2: (genre2 as any) || "",
