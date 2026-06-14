@@ -18,6 +18,23 @@ All endpoints use the **GET** method. Responses (unless noted otherwise) follow 
 
 ---
 
+## Authentication & Security
+
+All `/api` endpoints are protected and require an API Key. You must include the `x-api-key` header in every request.
+
+**Example Request:**
+```bash
+curl -H "x-api-key: your_secret_api_key_here" http://localhost:3000/api/latest
+```
+
+If the API key is missing or invalid, the API will return a `401 Unauthorized` error.
+
+## Rate Limiting
+
+To prevent abuse, the API enforces a rate limit of **200 requests per 90 seconds** per IP address. If you exceed this limit, you will receive a `429 Too Many Requests` response.
+
+---
+
 ## Table of Contents
 
 | #   | Endpoint                                             | Description                          |
