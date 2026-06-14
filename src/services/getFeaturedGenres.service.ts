@@ -1,10 +1,26 @@
 import { load } from "cheerio";
 import { api } from "../shared/lib/api.js";
 import { slugFilter } from "../shared/lib/utils/index.js";
+import type { ApiResponse, BaseComic } from "../shared/types/index.js";
 
-type genreList = { genre: string; items: any[] }[];
+export type FeaturedGenreComic = BaseComic & {
+  flag: string;
+  status: {
+    genre: string;
+    views: string;
+  };
+  latestChapter: string;
+  latestChapterSlug: string;
+};
 
-export const listGenreService = async (name?: string) => {
+export type FeaturedGenreGroup = {
+  genre: string;
+  items: FeaturedGenreComic[];
+};
+
+export const getFeaturedGenresService = async (
+  name?: string,
+): Promise<ApiResponse<FeaturedGenreGroup[]>> => {
   try {
     const res = await api.get("/");
     const $ = load(res.data);
@@ -24,7 +40,7 @@ export const listGenreService = async (name?: string) => {
 
     const targetGenre = name ? selectorMap[name] : undefined;
 
-    const genreList: genreList = [];
+    const genreList: FeaturedGenreGroup[] = [];
 
     $("section.ls.lsgenre").each((_, section) => {
       const sectionEl = $(section);
@@ -32,7 +48,7 @@ export const listGenreService = async (name?: string) => {
 
       if (targetGenre && genreLabel !== targetGenre) return;
 
-      const items: any[] = [];
+      const items: FeaturedGenreComic[] = [];
 
       sectionEl.find("article.ls2").each((_, el) => {
         const v = $(el).find(".ls2v");

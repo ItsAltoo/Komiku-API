@@ -1,16 +1,37 @@
 import { load } from "cheerio";
 import { api } from "../shared/lib/api.js";
 import { slugFilter } from "../shared/lib/utils/slugFilter.js";
+import type { ApiResponse, BaseChapter } from "../shared/types/index.js";
 
 const toSnakeCase = (str: string): string =>
   str.toLowerCase().replace(/\s+/g, "_");
 
-export const detailService = async (slug: string) => {
+export type ComicDetailChapter = {
+  title: string;
+  slug: string;
+  date: string;
+};
+
+export type ComicDetail = {
+  title: string;
+  thumbnail: string;
+  synopsis: string;
+  description: Record<string, any>;
+  chapters: {
+    initial: BaseChapter;
+    latest: BaseChapter;
+  };
+  chapterList: ComicDetailChapter[];
+};
+
+export const detailService = async (
+  slug: string,
+): Promise<ApiResponse<ComicDetail>> => {
   try {
     const res = await api.get(`/manga/${slug}`);
     const $ = load(res.data);
 
-    let detailList: any = {};
+    let detailList: Partial<ComicDetail> = {};
 
     $("main.perapih article").each((_, el) => {
       const ele = $(el);
@@ -49,7 +70,7 @@ export const detailService = async (slug: string) => {
         chapters.eq(1).find("a").attr("href") || "",
       );
 
-      const chapterList: any[] = [];
+      const chapterList: ComicDetailChapter[] = [];
 
       $("#daftarChapter tr[itemprop='itemListElement']").each((_, row) => {
         const td = $(row).find("td.judulseries");
@@ -81,7 +102,7 @@ export const detailService = async (slug: string) => {
       };
     });
 
-    return { data: detailList };
+    return { data: detailList as ComicDetail };
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : String(error));
   }

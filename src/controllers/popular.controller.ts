@@ -4,15 +4,18 @@ import {
   successResponse,
 } from "../shared/lib/utils/response.js";
 import { popularService } from "../services/getPopular.service.js";
+import type { KomikType } from "../shared/types/index.js";
 
 export const getPopular = async (req: Request, res: Response) => {
-  const { page, orderby, type } = req.query;
+  const { page, orderBy, type } = req.query;
 
   try {
+    const pageNumber = page ? parseInt(page as string, 10) : 1;
+
     const { data } = await popularService({
-      page: Number(page) || 1,
-      orderby: (orderby as any) || "",
-      type: (type as any) || "",
+      page: pageNumber,
+      orderBy: orderBy as "modified" | "date" | "rand" | "ranking",
+      type: type as KomikType,
     });
 
     return successResponse({

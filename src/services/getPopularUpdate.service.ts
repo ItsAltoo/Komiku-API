@@ -1,8 +1,22 @@
 import { load } from "cheerio";
 import { api } from "../shared/lib/api.js";
 import { slugFilter } from "../shared/lib/utils/index.js";
+import type { ApiResponse, BaseComic } from "../shared/types/index.js";
 
-export const popularUpdateService = async (type: string) => {
+export type PopularUpdateComic = BaseComic & {
+  updateCount: string;
+  status: {
+    genre: string;
+    views: string;
+  };
+  latestChapter: string;
+  latestChapterSlug: string;
+  flag: string;
+};
+
+export const popularUpdateService = async (
+  type: string,
+): Promise<ApiResponse<PopularUpdateComic[]>> => {
   try {
     const res = await api.get("/");
     const $ = load(res.data);
@@ -17,7 +31,7 @@ export const popularUpdateService = async (type: string) => {
       .toUpperCase()
       .concat(selectorMap[type]?.slice(1));
 
-    const popularUpdate: any[] = [];
+    const popularUpdate: PopularUpdateComic[] = [];
 
     $(
       `#Komik_Populer #ls12-populer article.ls2${filteredType ? `[data-tipe="${filteredType}"]` : ""}`,

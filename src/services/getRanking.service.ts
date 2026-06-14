@@ -1,8 +1,21 @@
 import { load } from "cheerio";
 import { api } from "../shared/lib/api.js";
 import { slugFilter } from "../shared/lib/utils/index.js";
+import type { ApiResponse, BaseComic } from "../shared/types/index.js";
 
-const rankingService = async (period: string = "all") => {
+export type RankingComic = BaseComic & {
+  status: {
+    genre: string;
+    views: string;
+  };
+  latestChapter: string;
+  latestChapterSlug: string;
+  rank: string;
+};
+
+const rankingService = async (
+  period: string = "all",
+): Promise<ApiResponse<RankingComic[]>> => {
   try {
     const res = await api.get("/");
     const $ = load(res.data);
@@ -14,7 +27,7 @@ const rankingService = async (period: string = "all") => {
     };
 
     const targetSelector = selectorMap[period] || "#rank-total";
-    const ranking: any[] = [];
+    const ranking: RankingComic[] = [];
 
     $(`${targetSelector} article.ls4`).each((_, el) => {
       const v = $(el).find(".ls4v");
