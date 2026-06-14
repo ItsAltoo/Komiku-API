@@ -9,3 +9,5 @@ export * from "./comicList.controller.js";
 export * from "./detail.controller.js";
 export * from "./similarComics.controller.js";
 export * from "./genreList.controller.js";
+export * from "./read.controller.js";
+export * from "./proxyImage.controller.js";
