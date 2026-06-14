@@ -14,7 +14,8 @@ router
   .get("/comic-list", control.getComicList)
   .get("/detail/:slug", control.getDetail)
   .get("/detail/:slug/similar-comics", control.getSimilarComics)
-  .get("/genre-list", control.getGenreList);
-  
+  .get("/genre-list", control.getGenreList)
+  .get("/read/:slug", control.getRead)
+  .get("/proxy-image", control.proxyImage);
 
 export default router;

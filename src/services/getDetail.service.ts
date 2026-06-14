@@ -17,7 +17,7 @@ export const detailService = async (slug: string) => {
 
       const title = ele.find("div#Judul header h1 span>span").text().trim();
       const thumbnail = ele.find("div.ims img").attr("src") || "";
-      const synpnosis = ele.find("p.desc").text().trim();
+      const synopsis = ele.find("p.desc").text().trim();
 
       const meta: Record<string, any> = {};
 
@@ -49,7 +49,7 @@ export const detailService = async (slug: string) => {
         chapters.eq(1).find("a").attr("href") || "",
       );
 
-      const chapter_list: any[] = [];
+      const chapterList: any[] = [];
 
       $("#daftarChapter tr[itemprop='itemListElement']").each((_, row) => {
         const td = $(row).find("td.judulseries");
@@ -59,13 +59,13 @@ export const detailService = async (slug: string) => {
         );
         const date = $(row).find("td.tanggalseries").text().trim();
 
-        chapter_list.push({ title, slug, date });
+        chapterList.push({ title, slug, date });
       });
 
       detailList = {
         title,
         thumbnail,
-        synpnosis,
+        synopsis,
         description: meta,
         chapters: {
           initial: {
@@ -77,7 +77,7 @@ export const detailService = async (slug: string) => {
             slug: latestChapterSlug,
           },
         },
-        chapter_list,
+        chapterList,
       };
     });
 

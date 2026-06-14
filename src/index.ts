@@ -26,7 +26,8 @@ app.get("/api", (_, res) => {
       "/comic-list?page=[number]&type=[manga|manhwa|manhua]&letter=[A-Z]",
       "/detail/:slug",
       "/detail/:slug/similar-comics",
-      "/genre-list"
+      "/genre-list",
+      "/read/:slug",
     ],
   });
 });
