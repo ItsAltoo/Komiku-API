@@ -3,8 +3,34 @@ import { api } from "../shared/lib/api.js";
 import { slugFilter } from "../shared/lib/utils/slugFilter.js";
 import type { ApiResponse, BaseChapter } from "../shared/types/index.js";
 
-const toSnakeCase = (str: string): string =>
-  str.toLowerCase().replace(/\s+/g, "_");
+const keyMap: Record<string, string> = {
+  judul: "title",
+  judul_alternatif: "alternativeTitle",
+  tipe: "type",
+  jenis_komik: "comicType",
+  tema: "theme",
+  genre: "genres",
+  author: "author",
+  pengarang: "author",
+  status: "status",
+  rating: "rating",
+  pembaca: "views",
+  cara_baca: "readingDirection",
+  konsep_cerita: "storyConcept",
+  umur_pembaca: "ageRating",
+  update: "updatedAt",
+};
+
+const toCamelCase = (str: string): string => {
+  return str
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase());
+};
+
+const mapKey = (rawKey: string): string => {
+  const normalizedKey = rawKey.toLowerCase().replace(/\s+/g, "_");
+  return keyMap[normalizedKey] || toCamelCase(rawKey);
+};
 
 export type ComicDetailChapter = {
   title: string;
@@ -43,12 +69,12 @@ export const detailService = async (
       const meta: Record<string, any> = {};
 
       $("table.inftable tbody tr").each((_, row) => {
-        const key = toSnakeCase(
+        const key = mapKey(
           $(row).find("td").eq(0).text().replace(":", "").trim(),
         );
         const value = $(row).find("td").eq(1);
 
-        if (key === "genre") {
+        if (key === "genres") {
           meta[key] = value
             .find("li.genre span")
             .map((_, el) => $(el).text().trim())
