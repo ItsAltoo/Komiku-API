@@ -51,7 +51,8 @@ To prevent abuse, the API enforces a rate limit of **200 requests per 90 seconds
 | 10  | [`/detail/:slug/similar-comics`](#10-similar-comics) | Get similar comics                   |
 | 11  | [`/genres`](#11-genres)                              | Get all available genres             |
 | 12  | [`/read/:slug`](#12-read)                            | Read a chapter                       |
-| 13  | [`/proxy-image`](#13-proxy-image)                    | Proxy an image URL                   |
+| 13  | [`/search`](#13-search)                              | Search for comics                    |
+| 14  | [`/proxy-image`](#14-proxy-image)                    | Proxy an image URL                   |
 
 ---
 
@@ -869,7 +870,71 @@ GET /api/read/solo-leveling-chapter-1
 
 ---
 
-## 13. Proxy Image
+## 13. Search
+
+Search for comics by a query string.
+
+```
+GET /api/search
+```
+
+### Query Parameters
+
+| Name    | Type   | Required | Description       |
+| ------- | ------ | -------- | ----------------- |
+| `query` | string | Yes      | Comic search term |
+
+### Example Request
+
+```
+GET /api/search?query=black+clover
+```
+
+### Response
+
+```json
+{
+  "status": "OK",
+  "message": "Successfully fetched search results",
+  "error": [],
+  "meta": null,
+  "data": [
+    {
+      "title": "Black Clover",
+      "slug": "black-clover",
+      "thumbnail": "https://...",
+      "type": "Manga",
+      "status": "Update 1 minggu lalu.",
+      "chapters": {
+        "initial": {
+          "title": "Chapter 1",
+          "slug": "black-clover-chapter-1"
+        },
+        "latest": {
+          "title": "Chapter 368",
+          "slug": "black-clover-chapter-368"
+        }
+      }
+    }
+  ]
+}
+```
+
+### Response Type
+
+| Field               | Type        | Description                         |
+| ------------------- | ----------- | ----------------------------------- |
+| `title`             | string      | Comic title                         |
+| `slug`              | string      | Comic slug                          |
+| `thumbnail`         | string      | Thumbnail image URL                 |
+| `type`              | string      | Comic type label (e.g. "Manga")     |
+| `status`            | string      | Update description                  |
+| `chapters.initial`  | BaseChapter | First chapter (`title` and `slug`)  |
+| `chapters.latest`   | BaseChapter | Latest chapter (`title` and `slug`) |
+
+---
+
+## 14. Proxy Image
 
 Proxy an image from the source website. Used internally by the `/read` endpoint to serve chapter images.
 
