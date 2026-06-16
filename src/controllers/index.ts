@@ -11,3 +11,4 @@ export * from "./similarComics.controller.js";
 export * from "./genres.controller.js";
 export * from "./read.controller.js";
 export * from "./proxyImage.controller.js";
+export * from "./search.controller.js";

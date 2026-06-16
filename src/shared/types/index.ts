@@ -116,3 +116,17 @@ export type BaseComic = {
   slug: string;
   thumbnail: string;
 };
+
+export type SearchComicChapter = {
+  name: string;
+  slug: string;
+};
+
+export type SearchComic = BaseComic & {
+  type: string;
+  status: string;
+  chapters: {
+    initial: BaseChapter;
+    latest: BaseChapter;
+  };
+};
