@@ -18,7 +18,7 @@ export const proxyImage = async (
 
     const response = await api.get(imageUrl, {
       ...reqConfig,
-      responseType: "stream",
+      responseType: "arraybuffer",
     });
 
     if (response.headers["content-type"]) {
@@ -28,7 +28,7 @@ export const proxyImage = async (
       res.setHeader("Cache-Control", response.headers["cache-control"] as string);
     }
 
-    response.data.pipe(res);
+    res.end(response.data);
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
       res.status(error.response.status).send(error.response.statusText);
