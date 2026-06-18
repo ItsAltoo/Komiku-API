@@ -27,7 +27,7 @@ export const getFeaturedGenresService = async (
 
     const selectorMap: Record<string, string> = {
       isekai: "Komik Isekai",
-      fantasy: "Komik Fantasi",
+      fantasy: "Komik Fantasy",
       romance: "Komik Romance",
       ecchi: "Komik Ecchi",
       drama: "Komik Drama",
@@ -35,7 +35,7 @@ export const getFeaturedGenresService = async (
       schoolLife: "Komik School Life",
       comedy: "Komik Comedy",
       action: "Komik Action",
-      adventure: "Komik Petualangan",
+      adventure: "Komik Adventure",
     };
 
     const targetGenre = name ? selectorMap[name] : undefined;
@@ -69,7 +69,9 @@ export const getFeaturedGenresService = async (
         const views = parts[1] || "";
 
         const latestChapter = j.find("a.ls2l").text().trim();
-        const latestChapterSlug = slugFilter(j.find("a.ls2l").attr("href") || "");
+        const latestChapterSlug = slugFilter(
+          j.find("a.ls2l").attr("href") || "",
+        );
 
         items.push({
           title,
