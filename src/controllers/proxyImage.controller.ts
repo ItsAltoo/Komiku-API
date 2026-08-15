@@ -1,7 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import { api } from "../shared/lib/api.js";
-import { reqConfig } from "../shared/lib/utils/requestConfig.js";
 
 export const proxyImage = async (
   req: Request,
@@ -17,7 +16,6 @@ export const proxyImage = async (
     }
 
     const response = await api.get(imageUrl, {
-      ...reqConfig,
       responseType: "arraybuffer",
     });
 
