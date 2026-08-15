@@ -17,6 +17,7 @@
   "dependencies": {
     "@types/express-serve-static-core": "^5.1.1",
     "axios": "^1.15.2",
+    "axios-retry": "^4.5.0",
     "cheerio": "^1.2.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
