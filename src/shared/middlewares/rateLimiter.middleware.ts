@@ -1,4 +1,4 @@
-import rateLimit from "express-rate-limit";
+import { rateLimit } from "express-rate-limit";
 import { errorResponse } from "../lib/utils/response.js";
 import type { Request, Response } from "express";
 

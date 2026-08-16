@@ -1,7 +1,18 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
-import axiosRetry from "axios-retry";
+import axiosRetryImport, { type IAxiosRetryConfig } from "axios-retry";
 import https from "node:https";
 import dotenv from "dotenv";
+
+// axios-retry ships dual ESM/CJS builds; some bundlers/type-resolvers land on
+// the module namespace instead of the callable default export, so unwrap it
+// defensively instead of relying on the default import always being callable.
+type AxiosRetryFn = (
+  instance: ReturnType<typeof axios.create>,
+  config?: IAxiosRetryConfig,
+) => unknown;
+const axiosRetry =
+  (axiosRetryImport as unknown as { default?: AxiosRetryFn }).default ??
+  (axiosRetryImport as unknown as AxiosRetryFn);
 
 dotenv.config();
 
